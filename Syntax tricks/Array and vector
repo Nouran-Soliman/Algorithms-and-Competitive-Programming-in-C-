@@ -1,0 +1,12 @@
+    int N;
+	cin >> N;
+	int *arr = new int[N]; // C ++
+	int  *arr = (int *)malloc(sizeof(int)*N); // C
+	vector<int > arr(N);
+	vector<int > arr;
+	arr.resolve(N);
+	arr.size == 0; 
+	arr.capacity == N; 
+	
+	
+	

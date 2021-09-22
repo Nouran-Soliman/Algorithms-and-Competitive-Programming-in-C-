@@ -1,0 +1,138 @@
+PATH 1:
+------
+0000	COPY      START      0        
+0000	FIRST     STL        RETADR   
+0003	CLOOP     JSUB       RDREC    
+0006	          LDA        LENGTH   
+0009	          COMP       #0       
+000C	          JEQ        ENDFIL   
+000F	          JSUB       WRREC    
+0012	          J          CLOOP    
+0015	ENDFIL    LDA        =C'EOF'  
+0018	          STA        BUFFER   
+001B	          LDA        #3       
+001E	          STA        LENGTH   
+0021	          JSUB       WRREC    
+0024	          J          @RETADR  
+0027	USE       CDATA               
+002A	RETADR    RESW       1        
+002D	LENGTH    RESW       1        
+0030	USE       CBLKS               
+0033	BUFFER    RESB       4096     
+1033	BUFEND    EQU        *        
+1036	MAXLEN    EQU        BUFEND-BUFFER
+1039	USE       RDREC      CLEAR X  
+103C	CLEAR     A                   
+103F	CLEAR     S                   
+1042	+LDT      #MAXLEN             
+1045	RLOOP     TD         INPUT    
+1048	          JEQ        RLOOP    
+104B	          RD         INPUT    
+104E	COMPR     A,S                 
+1051	          JEQ        EXIT     
+1054	          STCH       BUFFER,X 
+1057	TIXR      T                   
+105A	          JLT        TRLOOP   
+105D	EXIT      STX        LENGTH   
+1060	          RSUB                
+1063	USE       CDATA               
+1066	INPUT     BYTE       X'F1'    
+1067	USE       WRREC      CLEAR X  
+106A	LDT       LENGTH              
+106D	WLOOP     TD         =X'05'   
+1070	          JEQ        WLOOP    
+1073	          LDCH       BUFFER,X 
+1076	          WD         =X'05'   
+1079	TIXR      T                   
+107C	          JLT        WLOOP    
+107F	          RSUB                
+1082	USE       CDATA               
+1085	LTORG     END        FIRST    
+
+Symbol Table:
+-------------
+Symbol    Location
+------------------
+WLOOP      106D
+LDT        106A
+EXIT       105D
+TIXR       1079
+COMPR      104E
+RLOOP      1045
+FIRST      0000
++LDT       1042
+CLOOP      0003
+INPUT      1066
+BUFEND     1033
+ENDFIL     0015
+USE        1082
+LTORG      1085
+RETADR     002A
+BUFFER     0033
+MAXLEN     1036
+LENGTH     002D
+CLEAR      103F
+_____________________________________________________________
+
+PATH 2:
+------
+0000	COPY      START      0         
+0000	FIRST     STL        RETADR    140000
+0003	CLOOP     JSUB       RDREC     480000
+0006	          LDA        LENGTH    000000
+0009	          COMP       #0        280000
+000C	          JEQ        ENDFIL    300000
+000F	          JSUB       WRREC     480000
+0012	          J          CLOOP     3C0000
+0015	ENDFIL    LDA        =C'EOF'   000000
+0018	          STA        BUFFER    0C0000
+001B	          LDA        #3        000000
+001E	          STA        LENGTH    0C0000
+0021	          JSUB       WRREC     480000
+0024	          J          @RETADR   3C0000
+0027	USE       CDATA                
+002A	RETADR    RESW       1         
+002D	LENGTH    RESW       1         
+0030	USE       CBLKS                
+0033	BUFFER    RESB       4096      
+1033	BUFEND    EQU        *         
+1036	MAXLEN    EQU        BUFEND-BUFFER 
+1039	USE       RDREC      CLEAR X   
+103C	CLEAR     A                    
+103F	CLEAR     S                    
+1042	+LDT      #MAXLEN              
+1045	RLOOP     TD         INPUT     E00000
+1048	          JEQ        RLOOP     300000
+104B	          RD         INPUT     D80000
+104E	COMPR     A,S                  
+1051	          JEQ        EXIT      300000
+1054	          STCH       BUFFER,X  548000
+1057	TIXR      T                    
+105A	          JLT        TRLOOP    380000
+105D	EXIT      STX        LENGTH    100000
+1060	          RSUB                 4C0000
+1063	USE       CDATA                
+1066	INPUT     BYTE       X'F1'     
+1067	USE       WRREC      CLEAR X   
+106A	LDT       LENGTH               
+106D	WLOOP     TD         =X'05'    E00000
+1070	          JEQ        WLOOP     300000
+1073	          LDCH       BUFFER,X  508000
+1076	          WD         =X'05'    DC0000
+1079	TIXR      T                    
+107C	          JLT        WLOOP     380000
+107F	          RSUB                 4C0000
+1082	USE       CDATA                
+1085	LTORG     END        FIRST     
+
+HTE Format:
+-----------
+H.COPY.000000.001085
+T.000000.24.140000.480000.000000.280000.300000.480000.3C0000.000000.0C0000.000000.0C0000.480000
+T.000024.03.3C0000
+T.001045.09.E00000.300000.D80000
+T.001051.06.300000.548000
+T.00105A.09.380000.100000.4C0000
+T.00106D.0C.E00000.300000.508000.DC0000
+T.00107C.06.380000.4C0000
+E.000000
